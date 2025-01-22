@@ -1,38 +1,74 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native';
 import { useTeamByLeague } from '@/api/api-hooks/useTeamData';
-import { Team } from '@/api/queries/teams';
-import Carousel from 'react-native-snap-carousel';
 import DefaultContainer from '@/components/template/DefaultContainer';
+import { useTheme } from '@/utls/ThemeProvider';
+import TeamCardStats from '@/components/organisms/TeamCardStats';
+import { Team } from '@/api/queries/teams';
+
+const { width: screenWidth } = Dimensions.get('window');
 
 const InitialScreen = () => {
-	const { data, isLoading, error } = useTeamByLeague({ league: 'NBL' });
+	const { theme, appTheme } = useTheme();
+	const [addToList, setAddToList] = useState(10)
+	const { data, isInitialLoading, isLoading, refetch, isRefetching } = useTeamByLeague({ league: 'NBL', limit: addToList });
+	const [teams, setTeams] = useState<Team[]>();
+	const [noOfTeams, setNoOfTeams] = useState(0);
+	const [retryFetch, setRetryFetch] = useState(0)
+	const MAXRETRYFETCH = 3;
+
+	useEffect(() => {
+		if(data){
+			setTeams(data.data)
+		}
+	}, [isInitialLoading])
 	
-	const renderItem = ({ item }: { item: Team }) => {
-		return (
-			<View key={item.id} style={styles.carouselItemContainer}>
-				<Image
-					style={styles.carouselItemImage}
-					source={{
-						uri: item.team_logo ?? 'https://images.statsengine.playbyplay.api.geniussports.com/592f89e8bd7fa54fbe87b8b6d071d9faL1.png',
-					}}
-				/>
-				<Text>{item.team_nickname}</Text>
-			</View>
-		);
+
+	const refetchTeam = async () => {
+		setAddToList((prev) => prev + 10);
+		console.log(retryFetch)
+		if(retryFetch < MAXRETRYFETCH) {
+			refetch()
+			.then(response => {
+				if(noOfTeams === data?.count){
+					setRetryFetch(prev => prev + 1)
+				}else {
+					setRetryFetch(prev => 0)
+				}
+				setNoOfTeams(prev => data?.count ? data?.count : 0)
+				setTeams(response.data?.data);
+			})
+			.catch(err => {
+				console.log(err)
+			})
+		}
 	};
+
+	const renderItem = ({ item }: { item: Team }) => (
+		<TeamCardStats
+			external_id={item.external_id}
+			id={item.id}
+			name={item.name}
+			team_code={item.team_code}
+			team_logo={item.team_logo}
+			team_nickname={item.team_nickname}
+		/>
+	);
+
+	const ListActivityIndicator = () => (
+		isRefetching && (retryFetch < MAXRETRYFETCH) && <ActivityIndicator />
+	);
 
 	return (
 		<DefaultContainer>
-			<Text>sad</Text>
-			<Carousel
-				data={data?.data || []}
+			<FlatList
+				data={teams}
+				initialNumToRender={10}
 				renderItem={renderItem}
-				sliderWidth={300}
-				sliderHeight={300}
-				windowSize={Dimensions.get('window').height}
-				style={{ backgroundColor: 'red' }}
-				itemWidth={300}
+				keyExtractor={(item, index) => item.id || index.toString()}
+				onEndReached={refetchTeam}
+				ListFooterComponent={<ListActivityIndicator />}
+				onEndReachedThreshold={0.1}
 			/>
 		</DefaultContainer>
 	);
@@ -41,13 +77,16 @@ const InitialScreen = () => {
 export default InitialScreen;
 
 const styles = StyleSheet.create({
-	carouselItemContainer: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	carouselItemImage: {
+	teamLogo: {
 		height: 100,
 		width: 100,
-		resizeMode: 'contain',
+	},
+	itemItemContainer: {
+		flexDirection: 'row',
+	},
+	itemTextContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		paddingLeft: 5,
 	},
 });

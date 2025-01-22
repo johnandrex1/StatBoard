@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { ReactNode } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTheme } from '@/utls/ThemeProvider'
+import { StatusBar } from 'expo-status-bar'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface IDefaultContainer {
 	children?: ReactNode
@@ -9,10 +11,23 @@ interface IDefaultContainer {
 const DefaultContainer: React.FC<IDefaultContainer> = ({
 	children
 }) => {
+	const { theme } = useTheme();
+	const insets = useSafeAreaInsets();
 	return (
-		<SafeAreaView>
-			{children}
-		</SafeAreaView>
+		<>
+			<StatusBar backgroundColor={theme.statusBar.background}/>
+			<View style={[
+				{ backgroundColor: theme.screen.background, flex: 1 },
+				{  
+					paddingTop: insets.top,
+					paddingLeft: insets.left,
+					paddingBottom: insets.bottom,
+					paddingRight: insets.right,
+				}
+			]}>
+				{children}
+			</View>
+		</>
 	)
 }
 
