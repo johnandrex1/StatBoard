@@ -1,75 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native';
-import { useTeamByLeague } from '@/api/api-hooks/useTeamData';
+import { StyleSheet, ActivityIndicator, FlatList, Dimensions, Button } from 'react-native';
 import DefaultContainer from '@/components/template/DefaultContainer';
-import { useTheme } from '@/utls/ThemeProvider';
-import TeamCardStats from '@/components/organisms/TeamCardStats';
-import { Team } from '@/api/queries/teams';
+import { useRouter } from 'expo-router';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const InitialScreen = () => {
-	const { theme, appTheme } = useTheme();
-	const [addToList, setAddToList] = useState(10)
-	const { data, isInitialLoading, isLoading, refetch, isRefetching } = useTeamByLeague({ league: 'NBL', limit: addToList });
-	const [teams, setTeams] = useState<Team[]>();
-	const [noOfTeams, setNoOfTeams] = useState(0);
-	const [retryFetch, setRetryFetch] = useState(0)
-	const MAXRETRYFETCH = 3;
-
-	useEffect(() => {
-		if(data){
-			setTeams(data.data)
-		}
-	}, [isInitialLoading])
-	
-
-	const refetchTeam = async () => {
-		setAddToList((prev) => prev + 10);
-		console.log(retryFetch)
-		if(retryFetch < MAXRETRYFETCH) {
-			refetch()
-			.then(response => {
-				if(noOfTeams === data?.count){
-					setRetryFetch(prev => prev + 1)
-				}else {
-					setRetryFetch(prev => 0)
-				}
-				setNoOfTeams(prev => data?.count ? data?.count : 0)
-				setTeams(response.data?.data);
-			})
-			.catch(err => {
-				console.log(err)
-			})
-		}
-	};
-
-	const renderItem = ({ item }: { item: Team }) => (
-		<TeamCardStats
-			external_id={item.external_id}
-			id={item.id}
-			name={item.name}
-			team_code={item.team_code}
-			team_logo={item.team_logo}
-			team_nickname={item.team_nickname}
-		/>
-	);
-
-	const ListActivityIndicator = () => (
-		isRefetching && (retryFetch < MAXRETRYFETCH) && <ActivityIndicator />
-	);
+	const router = useRouter()
 
 	return (
 		<DefaultContainer>
-			<FlatList
-				data={teams}
-				initialNumToRender={10}
-				renderItem={renderItem}
-				keyExtractor={(item, index) => item.id || index.toString()}
-				onEndReached={refetchTeam}
-				ListFooterComponent={<ListActivityIndicator />}
-				onEndReachedThreshold={0.1}
-			/>
+			<Button onPress={() => router.push('/(tabs)')} title='Press me'/>
+				
 		</DefaultContainer>
 	);
 };

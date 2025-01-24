@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { fetchTeamSeasonStats, Team, TeamStats } from '@/api/queries/teams'
 import CardContainer from '../atoms/CardContainer'
@@ -7,6 +7,7 @@ import DefaultText from '../atoms/DefaultText';
 import { useTeamSeasonStats } from '@/api/api-hooks/useTeamData';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 const TeamCardStats: React.FC<Team> = ({
 	external_id,
@@ -16,6 +17,7 @@ const TeamCardStats: React.FC<Team> = ({
 	team_logo,
 	team_nickname
 }) => {
+	const router = useRouter();
 	const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState<TeamStats>();
@@ -45,10 +47,14 @@ const TeamCardStats: React.FC<Team> = ({
 			setIsLoading(false);
 		})
 	}, [])
+
+	const onPressTeam = () => {
+		router.push(`/stats/team?teamCode=${team_code}&teamId=${id}`);
+	}
 	
 
 	return (
-		<CardContainer key={id} style={[styles.itemItemContainer]}>
+		<CardContainer key={id} style={[styles.itemItemContainer]} onPress={onPressTeam}>
 			<Image
 				source={
 					team_logo

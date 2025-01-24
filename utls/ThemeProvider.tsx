@@ -140,7 +140,7 @@ const darkTheme: CustomTheme = {
 		cardTextAccent: '#CCC'
 	},
 	text: {
-		primary: '#000',
+		primary: '#fff',
 		accent: '#CCC'
 	},
 	statusBar: {

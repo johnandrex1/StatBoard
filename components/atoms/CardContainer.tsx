@@ -5,17 +5,22 @@ import { useTheme } from '@/utls/ThemeProvider'
 interface ICardContainer {
 	children?: ReactNode,
 	style?: StyleProp<ViewStyle>;
+	onPress?: () => void;
 }
 
 const CardContainer: React.FC<ICardContainer> = ({
 	children,
-	style
+	style,
+	onPress
 }) => {
 	const { theme } = useTheme()
 
 	return (
 		<View style={[styles.cardSectionContainer]}>
-			<Pressable style={[styles.cardContainer, {backgroundColor: theme.card.background},style]}>
+			<Pressable 
+				onPress={onPress}
+				style={[styles.cardContainer, {backgroundColor: theme.card.background},style]}
+			>
 				{children}
 			</Pressable>
 		</View>

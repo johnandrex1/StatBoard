@@ -2576,11 +2576,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 22.10.7
-  resolution: "@types/node@npm:22.10.7"
+  version: 22.10.9
+  resolution: "@types/node@npm:22.10.9"
   dependencies:
     undici-types: ~6.20.0
-  checksum: 2dce6c75c607c6269744f1ea2b5296e8685cd71d0dd5c599c3029626f9d2dc8b037912495cf68b30d6f39f44d3fa8b025e179662ef16dc363e0658425bedfde8
+  checksum: bd9a94fe5de516dcf13b4e9268696a99be3ba7146322c92b5ca3ea5368846cbb851843e2dda7030636653738405ea67e7bd972c630733420f84e199ad2c440ec
   languageName: node
   linkType: hard
 
@@ -2704,10 +2704,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abbrev@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "abbrev@npm:2.0.0"
-  checksum: 0e994ad2aa6575f94670d8a2149afe94465de9cedaaaac364e7fb43a40c3691c980ff74899f682f4ca58fa96b4cbd7421a015d3a6defe43a442117d7821a2f36
+"abbrev@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abbrev@npm:3.0.0"
+  checksum: 2500075b5ef85e97c095ab6ab2ea640dcf90bb388f46398f4d347b296f53399f984ec9462c74bee81df6bba56ef5fd9dbc2fb29076b1feb0023e0f52d43eb984
   languageName: node
   linkType: hard
 
@@ -4226,9 +4226,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.5.73":
-  version: 1.5.84
-  resolution: "electron-to-chromium@npm:1.5.84"
-  checksum: 4bdf445aa4fd970cef45cbeec2d20ce609f746b78a0e2e0a053ac01126b3901827877e770b2a841333458a2967017796a67a28e1c9dafc4d35002e32178e4d39
+  version: 1.5.86
+  resolution: "electron-to-chromium@npm:1.5.86"
+  checksum: a405cf3c21cd42120b630cbcb228a2847b2a598674394d29dc23a5b88218b7b2122d9db33a6a8c511337663f25210b2f98c4ecb1f1c77a1c98e46f71087dd19b
   languageName: node
   linkType: hard
 
@@ -4528,13 +4528,13 @@ __metadata:
   linkType: hard
 
 "expo-blur@npm:~14.0.2":
-  version: 14.0.2
-  resolution: "expo-blur@npm:14.0.2"
+  version: 14.0.3
+  resolution: "expo-blur@npm:14.0.3"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 9736a846000918ddaf9b3f190e2217e0bf121c8950263f80b0fbc2060016197ca7f438bbe48d0c29f703232ec232c1526753d61d54b80c190625111e7054c849
+  checksum: f5f8aad2fa23b7cadc4c84bc7690ba44ebbe15c7aca89a703662c8a176e96de243baed2fde879bd6e044aafbe115ff0f3460ab8667aab0fd2461dfb1e5c53431
   languageName: node
   linkType: hard
 
@@ -7671,13 +7671,13 @@ __metadata:
   linkType: hard
 
 "nopt@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "nopt@npm:8.0.0"
+  version: 8.1.0
+  resolution: "nopt@npm:8.1.0"
   dependencies:
-    abbrev: ^2.0.0
+    abbrev: ^3.0.0
   bin:
     nopt: bin/nopt.js
-  checksum: 2cfc65e7ee38af2e04aea98f054753b0230011c0eeca4ecf131bd7d25984cbbf6f214586e0ae5dfcc2e830bc0bffa5a7fb28ea8d0b306ffd4ae8ea2d814c1ab3
+  checksum: 49cfd3eb6f565e292bf61f2ff1373a457238804d5a5a63a8d786c923007498cba89f3648e3b952bc10203e3e7285752abf5b14eaf012edb821e84f24e881a92a
   languageName: node
   linkType: hard
 
@@ -8546,6 +8546,16 @@ __metadata:
     prop-types: ">=15.6.0"
     react-native-linear-gradient: ">=2.4.0"
   checksum: 72ef49877c66994acbae7be2e810aef20ced6301b5146c36f671876525d8904e3810af69e277ffe390f05925021f44e3dd16ea04f7e3782ca57610d36d723d54
+  languageName: node
+  linkType: hard
+
+"react-native-tableview-simple@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "react-native-tableview-simple@npm:4.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.64"
+  checksum: 1bfe2e61ef1f8c7b09fe090f14d622890e4c377460a05c26d0ba6cfe3ad60092e7234d9da53de8dcb8afbbae224d1e188e97d72cadc736a6d91678fc378597ae
   languageName: node
   linkType: hard
 
@@ -9568,6 +9578,7 @@ __metadata:
     react-native-safe-area-context: 4.12.0
     react-native-screens: ~4.4.0
     react-native-shimmer-placeholder: ^2.0.9
+    react-native-tableview-simple: ^4.4.1
     react-native-web: ~0.19.13
     react-native-webview: 13.12.5
     react-test-renderer: 18.3.1

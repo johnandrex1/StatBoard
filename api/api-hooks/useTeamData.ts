@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { fetchTeamByLeague, fetchTeamSeasonStats, IParamsFetchTeamSeasonStats, IParamsGetTeamByLeague } from "../queries/teams";
+import { fetchTeamByLeague, fetchTeamRoster, fetchTeamSeasonStats, IParamsFetchTeamRoster, IParamsFetchTeamSeasonStats, IParamsGetTeamByLeague } from "../queries/teams";
 
 export const useTeamByLeague = (
 	params: IParamsGetTeamByLeague,
@@ -22,6 +22,20 @@ export const useTeamSeasonStats = (
 			year: params.year ?? '2024',
 			seasonType: params.seasonType,
 			teamCode: params?.teamCode ?? ''
+		 }),
+	})
+};
+
+
+export const useTeamRoster = (
+	params: IParamsFetchTeamRoster,
+	options?: UseQueryOptions // Optional parameter to extend query options
+) => {
+	return useQuery({
+		queryKey: ['teamRoster'],
+		queryFn: () => fetchTeamRoster({ 
+			league: params.league ?? 'NBL',
+			teamId: params.teamId
 		 }),
 	})
 };
