@@ -1,10 +1,12 @@
 import { HapticTab } from '@/components/atoms/HapticTab';
 import { IconSymbol } from '@/components/atoms/IconSymbol.ios';
 import TabBarBackground from '@/components/atoms/TabBarBackground';
-import { useTheme } from '@/utls/ThemeProvider';
+import { useTheme } from '@/themes/ThemeProvider';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform, useColorScheme } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 export default function TabLayout() {
 	const { theme } = useTheme();
@@ -12,40 +14,53 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: theme.statusBar.background,
+				tabBarActiveTintColor: theme.brandColors.brandOrange,
 				headerShown: false,
-				tabBarButton: HapticTab,
-				tabBarBackground: TabBarBackground,
 				animation: 'shift',
-				tabBarStyle: Platform.select({
-					ios: {
-						// Use a transparent background on iOS to show the blur effect
-						position: 'absolute',
-					},
-					default: {},
-				}),
+				tabBarButton: HapticTab,
+				tabBarLabelStyle: {fontSize: 11, fontFamily: 'Roboto-SemiBold', marginTop: 5},
+				tabBarStyle: {
+					...Platform.select({
+						ios: {
+							position: 'absolute',
+							bottom: 0,
+							height: 115
+						},
+						android: {
+							height: 65,
+						},
+						default: {},
+					}),
+					backgroundColor: theme.tab.backgroundColor,
+				}
 			}}>
 			<Tabs.Screen
 				name="index"
 				options={{
 					title: 'Dashboard',
-					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+					tabBarIcon: ({ color }) => <Ionicons name="calendar-sharp" size={28} color={color} />
 				}}
 			/>
 			<Tabs.Screen
 				name="teams"
 				options={{
 					title: 'Teams',
-					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+					tabBarIcon: ({ color }) => <Ionicons name="basketball-sharp" size={28} color={color} />
 				}}
 			/>
 			<Tabs.Screen
 				name="players"
 				options={{
-					title: 'Player',
-					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+					title: 'Players',
+					tabBarIcon: ({ color }) => <Ionicons name="people-sharp" size={28} color={color} />
 				}}
 			/>
 		</Tabs>
 	);
 }
+
+const styles = StyleSheet.create({
+	tabBarLabel: {
+		fontFamily: 'Roboto-Bold',
+	}
+})

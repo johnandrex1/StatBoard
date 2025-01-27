@@ -1,8 +1,10 @@
+import { useTheme } from '@/themes/ThemeProvider';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 
 export function HapticTab(props: BottomTabBarButtonProps) {
+	const { theme } = useTheme()
 	return (
 		<PlatformPressable
 			{...props}
@@ -13,6 +15,9 @@ export function HapticTab(props: BottomTabBarButtonProps) {
 				}
 				props.onPressIn?.(ev);
 			}}
+			style={[props.style, {
+				backgroundColor: theme.tab.backgroundColor,
+			}]}
 		/>
 	);
 }

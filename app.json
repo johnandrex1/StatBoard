@@ -1,61 +1,61 @@
 {
-  "expo": {
-    "name": "stat-board",
-    "slug": "stat-board",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-font", 
-      [
-        "expo-font", 
-        {
-          "fonts": [
-            "./assets/fonts/Oswald-ExtraLight.ttf",
-            "./assets/fonts/Oswald-Light.ttf",
-            "./assets/fonts/Oswald-Regular.ttf",
-            "./assets/fonts/Oswald-Medium.ttf",
-            "./assets/fonts/Oswald-SemiBold.ttf",
-            "./assets/fonts/Oswald-Bold.ttf",
-            "./assets/fonts/Roboto-ExtraLight.ttf",
-            "./assets/fonts/Roboto-Light.ttf",
-            "./assets/fonts/Roboto-Regular.ttf",
-            "./assets/fonts/Roboto-Medium.ttf",
-            "./assets/fonts/Roboto-SemiBold.ttf",
-            "./assets/fonts/Roboto-Bold.ttf"
-          ]
-        }
-      ],
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
-  }
+	"expo": {
+		"name": "stat-board",
+		"slug": "stat-board",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/images/stat-icon.png",
+		"scheme": "myapp",
+		"userInterfaceStyle": "automatic",
+		"newArchEnabled": true,
+		"splash": {
+			"backgroundColor": "#FFF",
+			"image": "./assets/images/brand/brand-intro-image-lt.png",
+			"resizeMode": "contain",
+			"dark": {
+				"backgroundColor": "#FFF",
+				"image": "./assets/images/brand/brand-intro-image-lt.png",
+				"resizeMode": "contain"
+			}
+		},
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/images/stat-icon.png",
+				"backgroundColor": "#ffffff"
+			}
+		},
+		"web": {
+			"bundler": "metro",
+			"output": "static",
+			"favicon": "./assets/images/favicon.png"
+		},
+		"plugins": [
+			"expo-font",
+			[
+				"expo-font",
+				{
+					"fonts": [
+						"./assets/fonts/Oswald-ExtraLight.ttf",
+						"./assets/fonts/Oswald-Light.ttf",
+						"./assets/fonts/Oswald-Regular.ttf",
+						"./assets/fonts/Oswald-Medium.ttf",
+						"./assets/fonts/Oswald-SemiBold.ttf",
+						"./assets/fonts/Oswald-Bold.ttf",
+						"./assets/fonts/Roboto-ExtraLight.ttf",
+						"./assets/fonts/Roboto-Light.ttf",
+						"./assets/fonts/Roboto-Regular.ttf",
+						"./assets/fonts/Roboto-Medium.ttf",
+						"./assets/fonts/Roboto-SemiBold.ttf",
+						"./assets/fonts/Roboto-Bold.ttf"
+					]
+				}
+			]
+		],
+		"experiments": {
+			"typedRoutes": true
+		}
+	}
 }

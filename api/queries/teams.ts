@@ -1,4 +1,5 @@
 import { instance } from "../client";
+import { IPlayer } from "./players";
 
 // ================================================================
 // Get Teams
@@ -23,7 +24,6 @@ export const fetchTeamByLeague = async ({ league, limit = 10 }: IParamsGetTeamBy
 			params: { limit },
 		});
 		const data: { count: number; data: Team[] } = response.data;
-
 		// Filter out teams with null team_logo
 		const filteredTeams = data.data
 			.reduce((uniqueTeams, currentTeam) => {
@@ -55,6 +55,7 @@ export interface TeamStats {
 	rebounds_average: number;
 	blocks_average: number;
 	steals_average: number;
+	period?: string;
 	team: Team;
 }
 
@@ -62,8 +63,8 @@ export const fetchTeamSeasonStats = async ({ league = 'NBL', year = '2024', seas
 	try {
 		const response = await instance.get(`/get/${league}/team/stats/for/season/${year}/${seasonType}/team/${teamCode}`);
 		const data: { count: number; data: TeamStats[] } = response.data;
-
 		// Filter out teams with null team_logo
+		const periodZeroStat = data.data.find((item) => item?.period === "0");
 		const filteredTeams = data.data
 			.reduce((uniqueTeams, currentTeam) => {
 				if (!uniqueTeams.some((team) => team.team.team_code === currentTeam.team.team_code)) {
@@ -72,6 +73,35 @@ export const fetchTeamSeasonStats = async ({ league = 'NBL', year = '2024', seas
 				return uniqueTeams;
 			}, [] as TeamStats[]);
 		return { count: filteredTeams.length, data: filteredTeams };
+	} catch (error) {
+		throw error;
+	}
+}
+
+
+export const fetchTeamSeasonStatsV2 = async ({ league = 'NBL', year = '2024', seasonType = 'regular', teamCode }: IParamsFetchTeamSeasonStats) => {
+	try {
+		const response = await instance.get(`/get/${league}/team/stats/for/season/${year}/${seasonType}/team/${teamCode}`);
+		const data: { count: number; data: any[] } = response.data;
+		const periodZeroStat = data.data.find((item) => item?.period === "0");
+
+		const teamSeasonStats: TeamStats = {
+			points_average: periodZeroStat?.points_average || 0,
+			assists_average: periodZeroStat?.assists_average || 0,
+			rebounds_average: periodZeroStat?.rebounds_average || 0,
+			blocks_average: periodZeroStat?.blocks_average || 0,
+			steals_average: periodZeroStat?.steals_average || 0,
+			period: periodZeroStat?.period || '0',
+			team: {
+				external_id: periodZeroStat?.team?.external_id,
+				id: periodZeroStat?.team?.id,
+				name: periodZeroStat?.team?.name,
+				team_code: periodZeroStat?.team?.team_code ||  '',
+				team_logo: periodZeroStat?.team?.team_logo,
+				team_nickname: periodZeroStat?.team?.team_nickname
+			}
+		}
+		return { teamSeasonStats };
 	} catch (error) {
 		throw error;
 	}
@@ -86,19 +116,8 @@ export interface IParamsFetchTeamRoster {
 }
 
 export interface TeamsRoster {
-	player: RosterPlayer;
+	player: IPlayer;
 	team: Team;
-}
-
-export interface RosterPlayer {
-	id: string;
-	image?: string;
-	first_name?: string;
-	last_name?: string;
-	playing_position?: string;
-	height?: number;
-	weight?: number;
-	jersey_number?: string;
 }
 
 export const fetchTeamRoster = async ({
@@ -107,9 +126,9 @@ export const fetchTeamRoster = async ({
 }: IParamsFetchTeamRoster): Promise<{ count: number; roster: TeamsRoster[] }> => {
 	try {
 		// Make the API call
-		const response = await instance.get(`/get/${league}/players/for/team/${teamId}`, {
+		const response = await instance.get(`/get/${league}/players/for/team/${teamId}/in/season/2024`, {
 			params: {
-				limit: 12,
+				limit: 20,
 			},
 		});
 

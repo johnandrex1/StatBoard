@@ -1,25 +1,27 @@
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React, { ReactNode } from 'react'
-import { useTheme } from '@/utls/ThemeProvider'
+import { useTheme } from '@/themes/ThemeProvider'
 
 interface ICardContainer {
 	children?: ReactNode,
+	cardContainerStyle?: StyleProp<ViewStyle>;
 	style?: StyleProp<ViewStyle>;
 	onPress?: () => void;
 }
 
 const CardContainer: React.FC<ICardContainer> = ({
 	children,
+	cardContainerStyle,
 	style,
 	onPress
 }) => {
 	const { theme } = useTheme()
 
 	return (
-		<View style={[styles.cardSectionContainer]}>
+		<View style={[styles.cardSectionContainer, cardContainerStyle]}>
 			<Pressable 
 				onPress={onPress}
-				style={[styles.cardContainer, {backgroundColor: theme.card.background},style]}
+				style={[styles.cardContainer, {backgroundColor: theme.card.background}, style]}
 			>
 				{children}
 			</Pressable>
@@ -31,7 +33,6 @@ export default CardContainer
 
 const styles = StyleSheet.create({
 	cardSectionContainer: {
-		flex: 1,
 		paddingVertical: 10,
 		alignItems: 'center'
 	},

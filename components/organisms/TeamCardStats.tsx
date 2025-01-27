@@ -8,6 +8,7 @@ import { useTeamSeasonStats } from '@/api/api-hooks/useTeamData';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { useTheme } from '@/themes/ThemeProvider';
 
 const TeamCardStats: React.FC<Team> = ({
 	external_id,
@@ -17,6 +18,7 @@ const TeamCardStats: React.FC<Team> = ({
 	team_logo,
 	team_nickname
 }) => {
+	const { theme } = useTheme();
 	const router = useRouter();
 	const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 	const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +51,9 @@ const TeamCardStats: React.FC<Team> = ({
 	}, [])
 
 	const onPressTeam = () => {
-		router.push(`/stats/team?teamCode=${team_code}&teamId=${id}`);
+		if(team_code){
+			router.push(`/stats/team?teamCode=${team_code}&teamId=${id}`);
+		}
 	}
 	
 
@@ -64,26 +68,26 @@ const TeamCardStats: React.FC<Team> = ({
 				style={[styles.teamLogo]}
 			/>
 			<View style={[styles.itemTextContainer]}>
-				<DefaultText style={{ fontSize: 20 }} fontWeight={'headerBold'}>{team_nickname}</DefaultText>
-				<DefaultText style={{ fontSize: 14 }} fontWeight='regularRegular'>{name}</DefaultText>
+				<DefaultText style={{ fontSize: 20, color: theme.card.cardTextDisplayHeader }} fontWeight={'headerBold'}>{team_nickname}</DefaultText>
+				<DefaultText style={{ fontSize: 14, color: theme.card.cardTextPrimary }} fontWeight='regularRegular'>{name}</DefaultText>
 				<View style={{ marginVertical: 8, flexDirection: 'column' }}>
-					<DefaultText style={{marginBottom: 5}}>Stats this season</DefaultText>
+					<DefaultText style={{marginBottom: 5, color: theme.card.cardTextPrimary}}>Stats this season</DefaultText>
 					<ShimmerPlaceholder visible={!isLoading} style={{borderRadius: 3}}>
 						<View style={{flexDirection: 'row'}}>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>Points Avg: </DefaultText>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>{data?.points_average}</DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextAccent }} fontWeight='regularMedium'>Points Avg: </DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextPrimary }} fontWeight='regularMedium'>{data?.points_average || 'N/A'}</DefaultText>
 						</View>
 					</ShimmerPlaceholder>
 					<ShimmerPlaceholder visible={!isLoading} style={{marginVertical: 3, borderRadius: 3}}>
 						<View style={{flexDirection: 'row'}}>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>Assist Avg: </DefaultText>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>{data?.assists_average}</DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextAccent, marginRight: 5 }} fontWeight='regularMedium'>Assist Avg: </DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextPrimary }} fontWeight='regularMedium'>{data?.assists_average || 'N/A'}</DefaultText>
 						</View>
 					</ShimmerPlaceholder>
 					<ShimmerPlaceholder visible={!isLoading} style={{ borderRadius: 3 }}>
 						<View style={{flexDirection: 'row'}}>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>Rebound Avg: </DefaultText>
-							<DefaultText style={{ fontSize: 10 }} fontWeight='regularMedium'>{data?.rebounds_average}</DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextAccent }} fontWeight='regularMedium'>Rebound Avg: </DefaultText>
+							<DefaultText style={{ fontSize: 12, color: theme.card.cardTextPrimary }} fontWeight='regularMedium'>{data?.rebounds_average || 'N/A'}</DefaultText>
 						</View>
 					</ShimmerPlaceholder>
 				</View>

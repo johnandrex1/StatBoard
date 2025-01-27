@@ -1,7 +1,8 @@
 // ThemeProvider.tsx
-import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo, useEffect } from 'react';
 import { Theme, DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { useColorScheme } from 'react-native';
+import { ColorValue, useColorScheme } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type FontStyle = {
 	fontFamily: string;
@@ -20,25 +21,54 @@ type FontStyle = {
 };
 
 interface CustomTheme extends Theme {
+	tab: {
+		iconColor: string;
+		backgroundColor: ColorValue;
+	}
 	brandColors: {
-		brandBlack: string;
-		brandWhite : string;
-		brandOrange : string;
+		brandBlack: ColorValue;
+		brandWhite: ColorValue;
+		brandOrange: ColorValue;
 	};
 	text: {
-		primary: string;
-		accent: string;
+		primary: ColorValue;
+		accent: ColorValue;
 	}
 	screen: {
-		background: string;
+		background: ColorValue;
+		textPrimary: ColorValue;
 	};
 	card: {
-		background: string;
-		cardTextPrimary: string;
-		cardTextAccent: string;
+		background: ColorValue;
+		cardTextDisplayHeader: ColorValue,
+		cardTextPrimary: ColorValue;
+		cardTextAccent: ColorValue;
 	};
 	statusBar: {
-		background: string
+		background: ColorValue
+	};
+	table: {
+		background: ColorValue;
+		headerColor: ColorValue;
+		dataColor: ColorValue;
+		iconColorPrimary: ColorValue;
+		iconColorAccent: ColorValue;
+	};
+	radarGraph: {
+		firstOvelay: ColorValue;
+		secondOvelay: ColorValue;
+		thirdOvelay: ColorValue;
+		mainOverlay: ColorValue;
+		label: ColorValue;
+		points: ColorValue;
+	},
+	intro: {
+		background: ColorValue;
+	},
+	themeToggle: {
+		moon: ColorValue;
+		sun: ColorValue;
+		label: ColorValue;
 	}
 	fonts: {
 		regularFontThin: string;
@@ -73,18 +103,24 @@ interface CustomTheme extends Theme {
 
 const lightTheme: CustomTheme = {
 	...DefaultTheme,
+	tab: {
+		iconColor: '#000',
+		backgroundColor: '#F5F5F5'
+	},
 	brandColors: {
 		brandBlack: '#000000',
-		brandWhite : '#FFFFFF',
-		brandOrange : '#F68B1F'
+		brandWhite: '#FFFFFF',
+		brandOrange: '#F68B1F'
 	},
 	screen: {
-		background: '#CCCCCC',
+		background: '#F5F5F5',
+		textPrimary: '#000'
 	},
 	card: {
 		background: '#FFF',
+		cardTextDisplayHeader: '#F68B1F',
 		cardTextPrimary: '#000000',
-		cardTextAccent: '#CCC'
+		cardTextAccent: '#8F8F8F'
 	},
 	text: {
 		primary: '#000',
@@ -92,6 +128,29 @@ const lightTheme: CustomTheme = {
 	},
 	statusBar: {
 		background: '#000'
+	},
+	table: {
+		background: '#FFF',
+		headerColor: '#000',
+		dataColor: '#000',
+		iconColorPrimary: '#F68B1F',
+		iconColorAccent: '#F68B1F'
+	},
+	radarGraph: {
+		firstOvelay: 'rgba(246, 139, 31, 0.1)',
+		secondOvelay: 'rgba(246, 139, 31, 0.2)',
+		thirdOvelay: 'rgba(246, 139, 31, 0.3)',
+		mainOverlay: 'rgba(122, 122, 122, 0.4)',
+		label: '#000',
+		points: ''
+	},
+	intro: {
+		background: '#FFF'
+	},
+	themeToggle: {
+		moon: '#000',
+		sun: '#000',
+		label: '#000'
 	},
 	fonts: {
 		regularFontThin: 'Roboto-Thin',
@@ -126,25 +185,54 @@ const lightTheme: CustomTheme = {
 
 const darkTheme: CustomTheme = {
 	...DarkTheme,
+	tab: {
+		iconColor: '#000',
+		backgroundColor: '#3D3D3D'
+	},
 	brandColors: {
 		brandBlack: '#000000',
-		brandWhite : '#FFFFFF',
-		brandOrange : '#F68B1F'
+		brandWhite: '#FFFFFF',
+		brandOrange: '#F68B1F'
 	},
 	screen: {
-		background: '#000',
+		background: '#141414',
+		textPrimary: '#FFF'
 	},
 	card: {
 		background: '#FFF',
+		cardTextDisplayHeader: '#F68B1F',
 		cardTextPrimary: '#000000',
-		cardTextAccent: '#CCC'
+		cardTextAccent: '#8F8F8F'
 	},
 	text: {
 		primary: '#fff',
 		accent: '#CCC'
 	},
 	statusBar: {
-		background: '#000R'
+		background: '#000'
+	},
+	table: {
+		background: '#FFF',
+		headerColor: '#000',
+		dataColor: '#000',
+		iconColorPrimary: '#F68B1F',
+		iconColorAccent: '#8F8F8F'
+	},
+	radarGraph: {
+		firstOvelay: 'rgba(246, 139, 31, 0.1)',
+		secondOvelay: 'rgba(246, 139, 31, 0.2)',
+		thirdOvelay: 'rgba(246, 139, 31, 0.3)',
+		mainOverlay: 'rgba(122, 122, 122, 0.4)',
+		label: '#fff',
+		points: ''
+	},
+	intro: {
+		background: '#000'
+	},
+	themeToggle: {
+		moon: '#fff',
+		sun: '#fff',
+		label: '#fff'
 	},
 	fonts: {
 		regularFontThin: 'Roboto-Thin',
@@ -179,9 +267,11 @@ const darkTheme: CustomTheme = {
 
 interface ThemeContextProps {
 	theme: CustomTheme;
-	toggleTheme: ( theme: 'light' | 'dark') => void;
+	toggleTheme: (theme: 'light' | 'dark') => void;
 	appTheme: 'light' | 'dark'
 }
+
+const THEME_KEY = 'APP_THEME';
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
@@ -189,7 +279,29 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	const colorScheme = useColorScheme();
 	const [appTheme, setAppTheme] = useState<'light' | 'dark'>(colorScheme ?? 'light');
 
-	const toggleTheme = (toggleColorScheme: 'light' | 'dark') => setAppTheme((prev) => toggleColorScheme);
+	// Load saved theme from AsyncStorage
+	useEffect(() => {
+		const loadTheme = async () => {
+			try {
+				const savedTheme = await AsyncStorage.getItem(THEME_KEY);
+				if (savedTheme) {
+					setAppTheme(savedTheme as 'light' | 'dark');
+				}
+			} catch (error) {
+				console.error('Error loading theme:', error);
+			}
+		};
+		loadTheme();
+	}, []);
+
+	const toggleTheme = async (toggleColorScheme: 'light' | 'dark') => {
+		setAppTheme(toggleColorScheme);
+		try {
+			await AsyncStorage.setItem(THEME_KEY, toggleColorScheme);
+		} catch (error) {
+			console.error('Error saving theme:', error);
+		}
+	};
 
 	const theme = useMemo(() => (appTheme === 'light' ? lightTheme : darkTheme), [appTheme]);
 

@@ -1,9 +1,11 @@
-import { StyleProp, Text, View, ViewStyle, StyleSheet } from 'react-native'
+import { StyleProp, Text, View, ViewStyle, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import DefaultText from './DefaultText';
+import { useTheme } from '@/themes/ThemeProvider';
 
 
-export interface ITableData{
+export interface ITableData {
+	column: string;
 	dataValue?: string;
 	dataOnPress?: () => void;
 	dataIcon?: string;
@@ -17,10 +19,11 @@ const TableData: React.FC<ITableData> = ({
 	dataIcon,
 	cellStyle
 }) => {
+	const { theme } = useTheme()
 	return (
-		<View style={[styles.dataContainer, cellStyle]}>
-			<DefaultText>{dataValue}</DefaultText>
-		</View>
+		<Pressable style={[styles.dataContainer, cellStyle]} onPress={dataOnPress}>
+			<DefaultText fontWeight='regularRegular' style={{color: theme.table.dataColor}}>{dataValue}</DefaultText>
+		</Pressable>
 	)
 }
 

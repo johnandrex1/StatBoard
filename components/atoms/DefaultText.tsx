@@ -1,6 +1,6 @@
 import { Dimensions, DimensionValue, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useTheme } from '@/utls/ThemeProvider';
+import { useTheme } from '@/themes/ThemeProvider';
 import { TextProps, TextStyle } from "react-native";
 
 export interface IDefaultText extends TextProps {
@@ -42,8 +42,8 @@ const DefaultText: React.FC<IDefaultText> = ({ children, style, fontWeight = 'he
 				style={{
 					fontSize: fontSize,
 					color: theme.text.primary,
-					...style,
 					fontFamily: fontMapping[fontWeight],
+					...style
 				}}
 			>{children}</Text>
 		</>

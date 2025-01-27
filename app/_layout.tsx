@@ -1,7 +1,8 @@
-import { ThemeProvider } from "@/utls/ThemeProvider";
+import { ThemeProvider } from "@/themes/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useFonts } from 'expo-font';
+import { useEffect } from 'react'
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,7 @@ export default function RootLayout() {
 		'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf')
 
 	});
-	
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ThemeProvider>
