@@ -21,9 +21,9 @@ const FullActivityIndicator = () => {
 			/>
 			<DefaultText style={{fontSize: 24, alignSelf: 'center'}}>Loading ...</DefaultText>
 		</View>
-
+sadasd
 	)
-}
+}asdasd
 
 export default FullActivityIndicator
 
