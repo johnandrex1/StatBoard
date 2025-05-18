@@ -37,16 +37,16 @@ const DefaultText: React.FC<IDefaultText> = ({ children, style, fontWeight = 'he
 	};
 	
 	return (
-		<>asdasd
-			<Text
+		<>
+			<Textasdad
 				style={{
 					fontSize: fontSize,
-					color: theme.text.primary,
+					color: theme.text.primary,sdadsa
 					fontFamily: fontMapping[fontWeight],
 					...styleasd
 				}}
 			>{children}</Text>
-		</>
+		</>asdasd
 	)
 }
 
