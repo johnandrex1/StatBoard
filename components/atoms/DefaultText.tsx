@@ -38,15 +38,15 @@ const DefaultText: React.FC<IDefaultText> = ({ children, style, fontWeight = 'he
 	
 	return (
 		<>
-			<Text
+			<Textasdad
 				style={{
 					fontSize: fontSize,
-					color: theme.text.primary,
+					color: theme.text.primary,sdadsa
 					fontFamily: fontMapping[fontWeight],
 					...style
 				}}
 			>{children}</Text>
-		</>
+		</>asdasd
 	)
 }
 
